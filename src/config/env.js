@@ -1,4 +1,3 @@
-const path = require("path");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -6,6 +5,6 @@ dotenv.config();
 module.exports = {
   nodeEnv: process.env.NODE_ENV || "development",
   port: Number(process.env.PORT || 4000),
-  dbPath: process.env.DB_PATH || path.join(process.cwd(), "data", "hms.sqlite"),
+  databaseUrl: process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/medcore_hms",
   frontendOrigin: process.env.FRONTEND_ORIGIN || "http://localhost:4000",
 };

@@ -23,11 +23,11 @@ function validateRequired(payload, fields) {
   }
 }
 
-function getPatients(filters) {
+async function getPatients(filters) {
   return repository.getPatients(filters || {});
 }
 
-function createPatient(payload) {
+async function createPatient(payload) {
   validateRequired(payload, ["firstName", "lastName", "age", "gender", "department", "doctorId"]);
 
   return repository.createPatient({
@@ -38,28 +38,28 @@ function createPatient(payload) {
   });
 }
 
-function getDoctors() {
+async function getDoctors() {
   return repository.getDoctors();
 }
 
-function getAppointments(filters) {
+async function getAppointments(filters) {
   return repository.getAppointments(filters || {});
 }
 
-function createAppointment(payload) {
+async function createAppointment(payload) {
   validateRequired(payload, ["patientId", "doctorId", "department", "appointmentType", "scheduledAt"]);
   return repository.createAppointment(payload);
 }
 
-function getWards() {
+async function getWards() {
   return repository.getWardsWithBeds();
 }
 
-function getLabTests() {
+async function getLabTests() {
   return repository.getLabTests();
 }
 
-function createLabTest(payload) {
+async function createLabTest(payload) {
   validateRequired(payload, ["patientId", "orderedByDoctorId", "testName", "priority", "orderedAt"]);
   return repository.createLabTest({
     ...payload,
@@ -67,11 +67,11 @@ function createLabTest(payload) {
   });
 }
 
-function getInvoices() {
+async function getInvoices() {
   return repository.getInvoices();
 }
 
-function createInvoice(payload) {
+async function createInvoice(payload) {
   validateRequired(payload, ["patientId", "services", "amount", "netAmount", "issuedAt"]);
   return repository.createInvoice({
     ...payload,
@@ -79,23 +79,23 @@ function createInvoice(payload) {
   });
 }
 
-function getMedicines() {
+async function getMedicines() {
   return repository.getMedicines();
 }
 
-function reorderMedicine(id, qtyToAdd = 100) {
-  const medicines = repository.getMedicines();
+async function reorderMedicine(id, qtyToAdd = 100) {
+  const medicines = await repository.getMedicines();
   const existing = medicines.find((m) => Number(m.id) === Number(id));
   assertFound(existing, "Medicine not found");
   const nextStock = Number(existing.stock) + Number(qtyToAdd || 0);
   return repository.updateMedicineStock(id, nextStock);
 }
 
-function getDashboardSummary() {
+async function getDashboardSummary() {
   return repository.getDashboardSummary();
 }
 
-function search(query) {
+async function search(query) {
   if (!query || query.length < 2) {
     throw new HttpError(400, "Search query must be at least 2 characters");
   }

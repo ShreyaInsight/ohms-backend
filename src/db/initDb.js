@@ -1,22 +1,23 @@
 const fs = require("fs");
 const path = require("path");
-const { db, resolvedDbPath } = require("./client");
+const { pool } = require("./client");
 const { hashPassword } = require("../utils/password");
 
-function runSqlFile(filePath) {
+async function runSqlFile(filePath) {
   const sql = fs.readFileSync(filePath, "utf8");
-  db.exec(sql);
+  await pool.query(sql);
 }
 
-function init() {
+async function init() {
   const base = __dirname;
-  runSqlFile(path.join(base, "schema.sql"));
-  runSqlFile(path.join(base, "seed.sql"));
-  seedUsers();
-  console.log(`Database initialized at ${resolvedDbPath}`);
+  await runSqlFile(path.join(base, "schema.sql"));
+  await runSqlFile(path.join(base, "seed.sql"));
+  await seedUsers();
+  console.log("PostgreSQL database initialized successfully.");
+  await pool.end();
 }
 
-function seedUsers() {
+async function seedUsers() {
   const users = [
     { name: "System Admin", email: "admin@medcore.local", role: "admin", password: "Admin@123" },
     { name: "Reception Desk", email: "reception@medcore.local", role: "reception", password: "Reception@123" },
@@ -25,10 +26,16 @@ function seedUsers() {
     { name: "Pharmacy User", email: "pharmacy@medcore.local", role: "pharmacy", password: "Pharmacy@123" },
   ];
 
-  const stmt = db.prepare("INSERT INTO users (name, email, role, password_hash) VALUES (?, ?, ?, ?)");
   for (const user of users) {
-    stmt.run(user.name, user.email, user.role, hashPassword(user.password));
+    await pool.query(
+      "INSERT INTO users (name, email, role, password_hash) VALUES ($1, $2, $3, $4)",
+      [user.name, user.email, user.role, hashPassword(user.password)]
+    );
   }
 }
 
-init();
+init().catch(async (error) => {
+  console.error("Database initialization failed:", error.message);
+  await pool.end();
+  process.exit(1);
+});

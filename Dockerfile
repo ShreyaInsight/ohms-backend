@@ -10,9 +10,8 @@ COPY .env.example ./.env.example
 
 ENV NODE_ENV=production
 ENV PORT=4000
-ENV DB_PATH=./data/hms.sqlite
+ENV DATABASE_URL=postgresql://postgres:postgres@postgres:5432/medcore_hms
 ENV FRONTEND_ORIGIN=http://localhost:4000
-ENV NODE_OPTIONS=--experimental-sqlite
 
 EXPOSE 4000
 

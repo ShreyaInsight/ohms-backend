@@ -1,12 +1,4 @@
-DELETE FROM beds;
-DELETE FROM wards;
-DELETE FROM appointments;
-DELETE FROM lab_tests;
-DELETE FROM invoices;
-DELETE FROM medicines;
-DELETE FROM patients;
-DELETE FROM doctors;
-DELETE FROM users;
+TRUNCATE TABLE beds, wards, appointments, lab_tests, invoices, medicines, patients, doctors, users RESTART IDENTITY CASCADE;
 
 INSERT INTO doctors (id, name, department, experience_years, status, avatar) VALUES
 (1, 'Dr. Rajan Sharma', 'General Medicine', 18, 'on-duty', 'RS'),
@@ -31,11 +23,11 @@ INSERT INTO patients (id, patient_code, first_name, last_name, age, gender, depa
 (10, 'P-0010', 'Suresh', 'Yadav', 67, 'M', 'Cardiology', 2, 'admitted', '2026-03-29', '9876543219', 'O+', 'PMJAY');
 
 INSERT INTO appointments (patient_id, doctor_id, department, appointment_type, scheduled_at, status, notes) VALUES
-(1, 1, 'General Medicine', 'Consultation', '2026-04-03T09:00:00', 'done', 'Routine checkup'),
-(2, 2, 'Cardiology', 'Consultation', '2026-04-03T10:30:00', 'in-progress', 'Chest pain follow-up'),
-(3, 3, 'Orthopedics', 'Follow-up', '2026-04-03T11:15:00', 'waiting', 'Knee pain review'),
-(4, 4, 'Neurology', 'Consultation', '2026-04-03T12:00:00', 'scheduled', 'Migraine assessment'),
-(5, 5, 'Dermatology', 'Consultation', '2026-04-03T14:00:00', 'scheduled', 'Rash evaluation');
+(1, 1, 'General Medicine', 'Consultation', '2026-04-03T09:00:00Z', 'done', 'Routine checkup'),
+(2, 2, 'Cardiology', 'Consultation', '2026-04-03T10:30:00Z', 'in-progress', 'Chest pain follow-up'),
+(3, 3, 'Orthopedics', 'Follow-up', '2026-04-03T11:15:00Z', 'waiting', 'Knee pain review'),
+(4, 4, 'Neurology', 'Consultation', '2026-04-03T12:00:00Z', 'scheduled', 'Migraine assessment'),
+(5, 5, 'Dermatology', 'Consultation', '2026-04-03T14:00:00Z', 'scheduled', 'Rash evaluation');
 
 INSERT INTO wards (id, name, total_beds) VALUES
 (1, 'ICU', 20),
@@ -50,20 +42,20 @@ INSERT INTO beds (ward_id, bed_number, status) VALUES
 (4, 1, 'occupied'),(4, 2, 'occupied'),(4, 3, 'occupied'),(4, 4, 'occupied'),(4, 5, 'occupied'),(4, 6, 'occupied'),(4, 7, 'occupied'),(4, 8, 'occupied'),(4, 9, 'occupied'),(4, 10, 'occupied'),(4, 11, 'occupied'),(4, 12, 'occupied'),(4, 13, 'occupied'),(4, 14, 'occupied'),(4, 15, 'occupied'),(4, 16, 'maintenance'),(4, 17, 'maintenance'),(4, 18, 'free'),(4, 19, 'free'),(4, 20, 'free'),(4, 21, 'free'),(4, 22, 'free'),(4, 23, 'free'),(4, 24, 'free');
 
 INSERT INTO lab_tests (test_code, patient_id, ordered_by_doctor_id, test_name, priority, status, ordered_at) VALUES
-('LAB-4821', 2, 1, 'Complete Blood Count', 'routine', 'pending', '2026-04-03T09:15:00'),
-('LAB-4822', 6, 2, 'ABG Analysis', 'urgent', 'in-progress', '2026-04-03T09:30:00'),
-('LAB-4823', 3, 3, 'Lipid Profile', 'routine', 'pending', '2026-04-03T10:00:00'),
-('LAB-4824', 4, 4, 'MRI Brain Report', 'urgent', 'ready', '2026-04-03T08:00:00'),
-('LAB-4825', 5, 6, 'Blood Glucose', 'routine', 'ready', '2026-04-03T07:45:00'),
-('LAB-4826', 9, 7, 'Urine Culture', 'stat', 'in-progress', '2026-04-03T10:30:00');
+('LAB-4821', 2, 1, 'Complete Blood Count', 'routine', 'pending', '2026-04-03T09:15:00Z'),
+('LAB-4822', 6, 2, 'ABG Analysis', 'urgent', 'in-progress', '2026-04-03T09:30:00Z'),
+('LAB-4823', 3, 3, 'Lipid Profile', 'routine', 'pending', '2026-04-03T10:00:00Z'),
+('LAB-4824', 4, 4, 'MRI Brain Report', 'urgent', 'ready', '2026-04-03T08:00:00Z'),
+('LAB-4825', 5, 6, 'Blood Glucose', 'routine', 'ready', '2026-04-03T07:45:00Z'),
+('LAB-4826', 9, 7, 'Urine Culture', 'stat', 'in-progress', '2026-04-03T10:30:00Z');
 
 INSERT INTO invoices (invoice_code, patient_id, services, amount, insurance_amount, net_amount, status, issued_at) VALUES
-('INV-2841', 2, 'Consultation, ECG', 3200, 1500, 1700, 'paid', '2026-04-03T09:00:00'),
-('INV-2842', 6, 'ICU (2 days), Surgery', 82000, 60000, 22000, 'pending', '2026-04-03T09:30:00'),
-('INV-2843', 3, 'Ward (3 days), X-Ray', 15400, 10000, 5400, 'partial', '2026-04-03T10:00:00'),
-('INV-2844', 8, 'Consultation, Labs', 4800, 0, 4800, 'paid', '2026-04-03T08:45:00'),
-('INV-2845', 5, 'Maternity package', 45000, 35000, 10000, 'pending', '2026-04-03T10:30:00'),
-('INV-2846', 9, 'Surgery, Anesthesia', 110000, 80000, 30000, 'overdue', '2026-04-03T11:15:00');
+('INV-2841', 2, 'Consultation, ECG', 3200, 1500, 1700, 'paid', '2026-04-03T09:00:00Z'),
+('INV-2842', 6, 'ICU (2 days), Surgery', 82000, 60000, 22000, 'pending', '2026-04-03T09:30:00Z'),
+('INV-2843', 3, 'Ward (3 days), X-Ray', 15400, 10000, 5400, 'partial', '2026-04-03T10:00:00Z'),
+('INV-2844', 8, 'Consultation, Labs', 4800, 0, 4800, 'paid', '2026-04-03T08:45:00Z'),
+('INV-2845', 5, 'Maternity package', 45000, 35000, 10000, 'pending', '2026-04-03T10:30:00Z'),
+('INV-2846', 9, 'Surgery, Anesthesia', 110000, 80000, 30000, 'overdue', '2026-04-03T11:15:00Z');
 
 INSERT INTO medicines (name, category, stock, unit, expiry_date, status) VALUES
 ('Amoxicillin 500mg', 'Antibiotic', 12, 'Strips', '2026-06-30', 'low'),
