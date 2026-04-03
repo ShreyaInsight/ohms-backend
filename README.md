@@ -1,6 +1,6 @@
-# MedCore HMS (Production-Oriented Starter)
+# MedCore HMS 
 
-This project is now split into:
+This project is split into:
 - Frontend: `index.html`, `styles.css`, `script.js`
 - Backend: `backend/` (Express API + SQLite database)
 
